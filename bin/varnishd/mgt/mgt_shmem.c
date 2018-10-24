@@ -107,7 +107,7 @@ mgt_SHM_Init(void)
 	 * These calls really aren't necessary for this scenario.
 	 */
 	
-	if (getenv("VARNISH_HACK" == NULL)) {
+	if (getenv("VARNISH_HACK") == NULL) {
 		AZ(system("rm -rf " VSM_MGT_DIRNAME));
 		AZ(mkdir(VSM_MGT_DIRNAME, 0755));
 	}
