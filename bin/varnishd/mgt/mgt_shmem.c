@@ -93,6 +93,25 @@ mgt_SHM_Init(void)
 	int fd;
 
 	VJ_master(JAIL_MASTER_FILE);
+	
+	/* $hack(jeff.lill):
+	 *
+	 * I'm ignoring these two lines of code when the VARNISH_HACK
+	 * environment variable exists to workaround TMPFS related 
+	 * conflicts when trying to deploy [varnishd] as a Docker 
+	 * service via the [neon-proxy-cache] image.
+	 *
+	 * In this case, the VSM_MGT_DIRNAME directory is mounted as
+	 * a TMPFS to the container and will be guaranteed to exist 
+	 * and start out empty when the service container is started.
+	 * These calls really aren't necessary for this scenario.
+	 */
+	
+	if (getenv("VARNISH_HACK") == NULL) {
+		AZ(system("rm -rf " VSM_MGT_DIRNAME));
+		AZ(mkdir(VSM_MGT_DIRNAME, 0755));
+	}
+	
 	AZ(system("rm -rf " VSM_MGT_DIRNAME));
 	AZ(mkdir(VSM_MGT_DIRNAME, 0755));
 	fd = open(VSM_MGT_DIRNAME, O_RDONLY);
