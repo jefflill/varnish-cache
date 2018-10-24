@@ -93,8 +93,22 @@ mgt_SHM_Init(void)
 	int fd;
 
 	VJ_master(JAIL_MASTER_FILE);
-	AZ(system("rm -rf " VSM_MGT_DIRNAME));
-	AZ(mkdir(VSM_MGT_DIRNAME, 0755));
+	
+	/* $hack(jeff.lill):
+	 *
+	 * I'm commenting out these two lines of code to workaround
+	 * TMPFS related conflicts when trying to deploy [varnishd]
+	 * as a Docker service via the [neon-proxy-cache] image.
+	 *
+	 * The VSM_MGT_DIRNAME directory is mounted as a TMPFS
+	 * and will be guaranteed to exist and start out empty
+	 * when the service container is started so these calls
+	 * really aren't necessary for this scenario.
+	 */
+	
+	/* AZ(system("rm -rf " VSM_MGT_DIRNAME)); */
+	/* AZ(mkdir(VSM_MGT_DIRNAME, 0755)); */
+	
 	fd = open(VSM_MGT_DIRNAME, O_RDONLY);
 	VJ_fix_fd(fd, JAIL_FIXFD_VSMMGT);
 	VJ_master(JAIL_MASTER_LOW);
