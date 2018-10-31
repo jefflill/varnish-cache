@@ -477,7 +477,7 @@ main(int argc, char * const *argv)
 	case 'V':
 		if (argc != 2)
 			ARGV_ERR("Too many arguments for -V\n");
-		VCS_Message("varnishd");
+		VCS_Message("varnishd (neonHIVE)");
 		exit(0);
 	default:
 		break;
